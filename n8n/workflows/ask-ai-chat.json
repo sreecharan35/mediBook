@@ -1,0 +1,77 @@
+{
+  "name": "MediBook — Ask AI Chat Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ask-ai",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-ask-ai",
+      "name": "Webhook — Ask AI",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "medibook-ask-ai"
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o-mini",
+        "messages": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You are MediBook's AI Health Assistant. Help users find the right doctors, understand their symptoms at a high level, explain our booking process, and answer questions about our services. Always remind users to consult a real doctor for medical diagnosis. Keep responses concise, friendly, and helpful. Do not provide definitive medical diagnoses."
+            },
+            {
+              "role": "user",
+              "content": "={{ $json.body.message }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 500,
+          "temperature": 0.7
+        }
+      },
+      "id": "openai-chat",
+      "name": "OpenAI — Generate Response",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [480, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-credentials",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ reply: $json.choices[0].message.content, sessionId: $('Webhook — Ask AI').item.json.body.sessionId }) }}"
+      },
+      "id": "respond-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [720, 300]
+    }
+  ],
+  "connections": {
+    "Webhook — Ask AI": {
+      "main": [
+        [{ "node": "OpenAI — Generate Response", "type": "main", "index": 0 }]
+      ]
+    },
+    "OpenAI — Generate Response": {
+      "main": [
+        [{ "node": "Respond to Webhook", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

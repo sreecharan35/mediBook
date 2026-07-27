@@ -1,0 +1,37 @@
+{
+  "name": "MediBook — Appointment Booked Flow",
+  "nodes": [
+    {
+      "parameters": { "path": "appointment-booked", "responseMode": "onReceived" },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [240, 300],
+      "webhookId": "medibook-appointment-booked"
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@medibook.ai",
+        "toEmail": "={{$json.data.patient.email}}",
+        "subject": "Appointment Confirmed — {{$json.data.confirmationCode}}",
+        "text": "Hi {{$json.data.patient.name}},\n\nYour appointment with {{$json.data.doctorName}} ({{$json.data.specialty}}) is confirmed!\n\nDate: {{$json.data.date}}\nTime: {{$json.data.time}}\nConfirmation: {{$json.data.confirmationCode}}\n\nSee you soon!\n— MediBook Team"
+      },
+      "name": "Send Confirmation Email",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [460, 200]
+    },
+    {
+      "parameters": {
+        "accountSid": "={{$credentials.twilioAccountSid}}",
+        "to": "={{$json.data.patient.phone}}",
+        "from": "={{$credentials.twilioPhoneNumber}}",
+        "body": "MediBook: Your appt with {{$json.data.doctorName}} on {{$json.data.date}} at {{$json.data.time}} is confirmed! Code: {{$json.data.confirmationCode}}"
+      },
+      "name": "Send SMS",
+      "type": "n8n-nodes-base.twilio",
+      "position": [460, 400]
+    }
+  ],
+  "connections": {
+    "Webhook": { "main": [[{ "node": "Send Confirmation Email", "type": "main", "index": 0 }, { "node": "Send SMS", "type": "main", "index": 0 }]] }
+  }
+}
