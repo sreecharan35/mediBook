@@ -12,7 +12,7 @@ import { ENV } from '../../config/env';
 const N8N_CHAT_WEBHOOK = ENV.N8N_WEBHOOK_URL || null;
 const isN8nConnected = !!N8N_CHAT_WEBHOOK && !N8N_CHAT_WEBHOOK.includes('placeholder');
 // Use Vite proxy path in dev; direct URL in production
-const N8N_FETCH_URL = '/api/n8n';
+const N8N_FETCH_URL = import.meta.env.DEV ? '/api/n8n' : N8N_CHAT_WEBHOOK;
 
 /* ── Setup steps data ── */
 const setupSteps = [
