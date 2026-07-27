@@ -40,6 +40,12 @@ app.use('/api/', limiter);
 // ── Health Check ───────────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ status: 'OK', timestamp: new Date().toISOString() }));
 
+// ── URL Normalization ──────────────────────────────────────────
+app.use((req, res, next) => {
+  req.url = req.url.replace(/\/{2,}/g, '/');
+  next();
+});
+
 // ── API Routes ─────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/doctors', doctorRoutes);
