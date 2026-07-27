@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import BookingCalendar from './components/BookingCalendar';
 import TimeSlotGrid from './components/TimeSlotGrid';
 import { useAuth } from '../../context/AuthContext';
+import { appointmentService } from '../../services/appointmentService';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -104,24 +105,45 @@ const MyAppointmentsPage = () => {
     return matchStatus && matchSearch;
   });
 
-  const handleCancel = (id) => {
+  const handleCancel = async (id) => {
+    const apt = appointments.find(a => a.id === id);
+    if (!apt) return;
     if(window.confirm('Are you sure you want to cancel this appointment?')) {
-      setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' } : a));
-      setCancelToast(`Appointment ${id} has been cancelled.`);
-      setTimeout(() => setCancelToast(null), 3000);
+      try {
+        await appointmentService.updateAppointmentStatus(apt._id, 'cancelled');
+        setAppointments(prev => prev.map(a => a.id === id ? { ...a, status: 'cancelled' } : a));
+        setCancelToast(`Appointment ${id} has been cancelled.`);
+        setTimeout(() => setCancelToast(null), 3000);
+      } catch (error) {
+        setCancelToast('Failed to cancel appointment.');
+        setTimeout(() => setCancelToast(null), 3000);
+      }
     }
   };
 
-  const handleRescheduleSubmit = () => {
+  const handleRescheduleSubmit = async () => {
     if (!newDate || !newTime) return;
-    setAppointments(prev => prev.map(a => 
-      a.id === rescheduleApt.id 
-        ? { ...a, date: newDate, time: newTime, type: newType } 
-        : a
-    ));
-    setCancelToast(`Appointment ${rescheduleApt.id} rescheduled to ${formatDate(newDate)} at ${formatTime(newTime)}.`);
-    setTimeout(() => setCancelToast(null), 4000);
-    setRescheduleApt(null);
+    try {
+      await fetch(`${API_URL}/api/appointments/${rescheduleApt._id || rescheduleApt.id}/reschedule`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(getToken() ? { 'Authorization': `Bearer ${getToken()}` } : {})
+        },
+        body: JSON.stringify({ date: newDate, time: newTime })
+      });
+      setAppointments(prev => prev.map(a => 
+        a.id === rescheduleApt.id 
+          ? { ...a, date: newDate, time: newTime, type: newType } 
+          : a
+      ));
+      setCancelToast(`Appointment ${rescheduleApt.id} rescheduled to ${formatDate(newDate)} at ${formatTime(newTime)}.`);
+      setTimeout(() => setCancelToast(null), 4000);
+      setRescheduleApt(null);
+    } catch (error) {
+      setCancelToast('Failed to reschedule appointment.');
+      setTimeout(() => setCancelToast(null), 3000);
+    }
   };
 
   return (

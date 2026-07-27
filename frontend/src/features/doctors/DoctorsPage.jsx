@@ -6,7 +6,7 @@ import {
   SlidersHorizontal, ChevronDown, X, Filter, Loader2
 } from 'lucide-react';
 import { doctorService } from '../../services/doctorService';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 const specialties = ['All', 'Cardiologist', 'Neurologist', 'Pediatrician', 'Orthopedic', 'Dermatologist', 'General Physician'];
 const sortOptions = ['Relevance', 'Rating (High)', 'Fee (Low)', 'Experience'];
@@ -57,7 +57,8 @@ const DoctorCard = ({ doctor, index }) => {
 };
 
 const DoctorsPage = () => {
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
   const [specialty, setSpecialty] = useState('All');
   const [sortBy, setSortBy] = useState('Relevance');
   const [feeRange, setFeeRange] = useState('Any');

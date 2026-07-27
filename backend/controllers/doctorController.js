@@ -85,4 +85,22 @@ const createDoctor = asyncHandler(async (req, res) => {
   res.status(201).json({ ...createdDoctor._doc, id: createdDoctor._id });
 });
 
-module.exports = { getAllDoctors, getDoctorById, getAvailableSlots, createDoctor };
+// DELETE /api/doctors/:id
+const deleteDoctor = asyncHandler(async (req, res) => {
+  const doctor = await Doctor.findByIdAndDelete(req.params.id);
+  if (!doctor) {
+    return res.status(404).json({ error: 'Doctor not found.' });
+  }
+  res.json({ message: 'Doctor removed successfully' });
+});
+
+// PUT /api/doctors/:id
+const updateDoctor = asyncHandler(async (req, res) => {
+  const doctor = await Doctor.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  if (!doctor) {
+    return res.status(404).json({ error: 'Doctor not found.' });
+  }
+  res.json({ ...doctor._doc, id: doctor._id });
+});
+
+module.exports = { getAllDoctors, getDoctorById, getAvailableSlots, createDoctor, deleteDoctor, updateDoctor };

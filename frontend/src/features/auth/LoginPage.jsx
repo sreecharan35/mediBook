@@ -41,7 +41,7 @@ const LoginPage = () => {
 
       login(result.user, result.token, data.remember);
       setSuccess(true);
-      const from = location.state?.from || '/dashboard';
+      const from = location.state?.from || '/';
       setTimeout(() => navigate(from, { replace: true }), 1000);
     } catch (err) {
       setLoginError(err.message || 'Invalid email or password.');

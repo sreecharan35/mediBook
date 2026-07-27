@@ -27,9 +27,13 @@ export const doctorService = {
 
   async addDoctor(doctorData) {
     try {
+      const token = localStorage.getItem('medibook_token') || sessionStorage.getItem('medibook_token');
       const res = await fetch(`${API_URL}/api/doctors`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(doctorData)
       });
       if (!res.ok) {
@@ -39,6 +43,48 @@ export const doctorService = {
       return await res.json();
     } catch (error) {
       console.error('Error adding doctor:', error);
+      throw error;
+    }
+  },
+
+  async deleteDoctor(id) {
+    try {
+      const token = localStorage.getItem('medibook_token') || sessionStorage.getItem('medibook_token');
+      const res = await fetch(`${API_URL}/api/doctors/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete doctor');
+      }
+      return await res.json();
+    } catch (error) {
+      console.error('Error deleting doctor:', error);
+      throw error;
+    }
+  },
+
+  async updateDoctor(id, doctorData) {
+    try {
+      const token = localStorage.getItem('medibook_token') || sessionStorage.getItem('medibook_token');
+      const res = await fetch(`${API_URL}/api/doctors/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(doctorData)
+      });
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to update doctor');
+      }
+      return await res.json();
+    } catch (error) {
+      console.error('Error updating doctor:', error);
       throw error;
     }
   }

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 import { bookingSchema, stepFields } from '../../utils/bookingSchemas';
 import { generateAppointmentId, formatDate, formatTime } from '../../utils/appointmentUtils';
@@ -539,12 +540,16 @@ const BookPage = () => {
   const onSubmit = async (data) => {
     setSubmitting(true);
     try {
-      // Create appointment in Supabase
       const newAppointment = await appointmentService.createAppointment({
-        patient_id: 'b1000000-0000-0000-0000-000000000001', // Using Demo Patient ID for now
+        patient_id: user?.id || 'b1000000-0000-0000-0000-000000000001',
         doctor_id: data.doctorId,
+        doctorName: data.doctorName,
+        specialty: data.doctorSpecialty,
         date: data.date,
         time: data.time,
+        patientName: data.name,
+        patientEmail: data.email,
+        patientPhone: data.phone,
         symptoms: data.symptoms || null
       });
       
@@ -568,7 +573,7 @@ const BookPage = () => {
       setSuccess(true);
     } catch (error) {
       console.error('Submission failed:', error);
-      // Fallback/Error state handling could be added here
+      toast.error(error.message || 'Failed to book appointment. Please try again.');
     } finally {
       setSubmitting(false);
     }

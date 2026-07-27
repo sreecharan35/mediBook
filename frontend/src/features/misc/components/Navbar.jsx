@@ -37,7 +37,6 @@ const navConfig = [
   { label: 'About', to: '/about' },
   { label: 'Contact', to: '/contact' },
   { label: 'Ask AI', to: '/ask-ai' },
-  { label: 'Dashboard', to: '/appointments' },
 ];
 
 const dropdownVariants = {
@@ -115,12 +114,26 @@ const Navbar = () => {
   const { isDark, toggleTheme } = useTheme();
   const { isAuthenticated, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 20);
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setHidden(true); // Scrolling down
+      } else if (currentScrollY < lastScrollY.current) {
+        setHidden(false); // Scrolling up
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -131,9 +144,9 @@ const Navbar = () => {
   return (
     <motion.header
       className={`navbar ${scrolled ? 'scrolled' : ''}`}
-      initial={{ y: -80 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      initial={{ y: -100 }}
+      animate={{ y: hidden ? -100 : 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
     >
       <div className="container">
         <div className="navbar-inner">

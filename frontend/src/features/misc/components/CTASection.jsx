@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight } from 'lucide-react';
 
 const CTASection = () => {
@@ -60,26 +61,28 @@ const CTASection = () => {
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.35 }}
           >
-            <motion.a
-              href="#"
-              className="btn btn-white"
-              style={{ padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: 700, borderRadius: 14 }}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Calendar size={18} />
-              Book Appointment
-            </motion.a>
-            <motion.a
-              href="#"
-              className="btn btn-outline-white"
-              style={{ padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: 700, borderRadius: 14 }}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Learn More
-              <ArrowRight size={18} />
-            </motion.a>
+            <Link to="/book" style={{ textDecoration: 'none' }}>
+              <motion.button
+                className="btn btn-white"
+                style={{ border: 'none', cursor: 'pointer', padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: 700, borderRadius: 14, display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <Calendar size={18} />
+                Book Appointment
+              </motion.button>
+            </Link>
+            <Link to="/about" style={{ textDecoration: 'none' }}>
+              <motion.button
+                className="btn btn-outline-white"
+                style={{ border: 'none', cursor: 'pointer', padding: '0.9rem 2rem', fontSize: '1rem', fontWeight: 700, borderRadius: 14, display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'transparent', color: 'white', border: '2px solid white' }}
+                whileHover={{ scale: 1.04, backgroundColor: 'rgba(255,255,255,0.1)' }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Learn More
+                <ArrowRight size={18} />
+              </motion.button>
+            </Link>
           </motion.div>
 
           {/* Trust signals */}

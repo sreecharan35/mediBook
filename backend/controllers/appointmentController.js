@@ -11,6 +11,18 @@ const createAppointment = asyncHandler(async (req, res) => {
 
   const confirmationCode = `MB-${Date.now().toString(36).toUpperCase()}`;
 
+  // Check for double booking
+  const existingAppointment = await Appointment.findOne({
+    doctorId,
+    date,
+    time,
+    status: { $nin: ['cancelled'] } // Don't block if the existing one is cancelled
+  });
+
+  if (existingAppointment) {
+    return res.status(400).json({ error: 'This time slot is already booked for this doctor.' });
+  }
+
   const appointment = await Appointment.create({
     doctorId, doctorName, specialty, date, time,
     patient: { name: patientName, email: patientEmail, phone: patientPhone, userId: req.user ? req.user.id : undefined },

@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('medibook_token') || sessionStorage.getItem('medibook_token');
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 };
 
@@ -27,7 +27,10 @@ export const appointmentService = {
           reason: appointmentData.symptoms,
         })
       });
-      if (!res.ok) throw new Error('Failed to create appointment');
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to create appointment');
+      }
       const data = await res.json();
       return data.appointment;
     } catch (error) {

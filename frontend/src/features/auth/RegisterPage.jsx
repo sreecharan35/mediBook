@@ -32,11 +32,25 @@ const RegisterPage = () => {
     validate
   );
 
+  const [registerError, setRegisterError] = useState('');
+
   const onSubmit = handleSubmit(async (data) => {
-    await new Promise(r => setTimeout(r, 1400));
-    login({ name: data.name, email: data.email, role, id: `PT-${Math.floor(Math.random()*10000)}` });
-    setSuccess(true);
-    setTimeout(() => navigate('/book'), 1500);
+    setRegisterError('');
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: data.name, email: data.email, password: data.password, role })
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Registration failed.');
+
+      login(result.user, result.token, false);
+      setSuccess(true);
+      setTimeout(() => navigate('/'), 1500);
+    } catch (err) {
+      setRegisterError(err.message || 'Registration failed.');
+    }
   });
 
   return (

@@ -26,6 +26,14 @@ const DashboardLayout = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchSubmit = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      navigate(`/doctors?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -172,10 +180,20 @@ const DashboardLayout = () => {
       <main className="dash-main">
         {/* Top Header */}
         <header className="dash-top-header hide-on-mobile">
-          <div className="dash-header-search">
-            <Search size={18} className="search-icon" />
-            <input type="text" placeholder="Search appointments, doctors..." />
-          </div>
+          {location.pathname.includes('/doctors') || location.pathname.includes('/add-doctor') ? (
+            <div className="dash-header-search">
+              <Search size={18} className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="Search doctors..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleSearchSubmit}
+              />
+            </div>
+          ) : (
+            <div></div> // Empty div to preserve flex layout if needed
+          )}
           
           <div className="dash-header-actions">
             <button className="icon-btn" onClick={toggleTheme}>
@@ -203,7 +221,7 @@ const DashboardLayout = () => {
 
         {/* Page Content */}
         <div className="dash-content-wrapper">
-          <Outlet />
+          <Outlet context={{ searchQuery }} />
         </div>
       </main>
     </div>

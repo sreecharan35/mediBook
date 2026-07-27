@@ -4,12 +4,14 @@ import { Loader2, ShieldAlert, Check, Shield } from 'lucide-react';
 import { userService } from '../../services/userService';
 import toast from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
+import { useOutletContext } from 'react-router-dom';
 
 const ManageUsersPage = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(null);
   const { user: currentUser } = useAuth();
+  const { searchQuery = '' } = useOutletContext() || {};
 
   useEffect(() => {
     fetchUsers();
@@ -73,7 +75,19 @@ const ManageUsersPage = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map(u => (
+              {users.filter(u =>
+                u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                u.email.toLowerCase().includes(searchQuery.toLowerCase())
+              ).length === 0 ? (
+                <tr>
+                  <td colSpan="4" style={{ padding: '2rem', textAlign: 'center', color: 'var(--text-muted)' }}>
+                    {searchQuery ? 'No users match your search.' : 'No users found.'}
+                  </td>
+                </tr>
+              ) : users.filter(u =>
+                u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                u.email.toLowerCase().includes(searchQuery.toLowerCase())
+              ).map(u => (
                 <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
                   <td style={{ padding: '1rem', color: 'var(--text-primary)', fontWeight: 500 }}>
                     {u.name}
@@ -89,7 +103,7 @@ const ManageUsersPage = () => {
                   </td>
                   <td style={{ padding: '1rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <select 
+                      <select
                         value={u.role}
                         onChange={(e) => handleRoleChange(u.id, e.target.value)}
                         disabled={updating === u.id || (u.id === currentUser?.id && u.email === 'sreecharan8354@gmail.com')}

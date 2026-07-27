@@ -12,7 +12,7 @@ const SocialLogin = () => {
     try {
       await loginWithGoogle(credentialResponse.credential);
       toast.success('Successfully logged in with Google!');
-      const from = location.state?.from || '/dashboard';
+      const from = location.state?.from || '/';
       navigate(from, { replace: true });
     } catch (error) {
       toast.error('Google sign-in failed. Please try again.');
