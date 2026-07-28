@@ -241,7 +241,7 @@ const HeroSection = () => {
                   initial={{ opacity: 0, y: 30, scale: 0.92 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ delay: 0.45 + i * 0.12, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  whileHover={{ y: -6, boxShadow: '0 20px 50px rgba(37,99,235,0.18)' }}
+                  whileHover={{ y: -6 }}
                 >
                   <div className="nh-doc-top">
                     <img

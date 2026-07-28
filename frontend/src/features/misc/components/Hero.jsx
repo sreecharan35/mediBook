@@ -133,7 +133,7 @@ const Hero = () => (
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.6 }}
-              whileHover={{ y: -4, boxShadow: '0 24px 60px rgba(59,130,246,0.2)' }}
+              whileHover={{ y: -4 }}
             >
               {/* Card header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>

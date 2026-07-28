@@ -138,7 +138,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 
 .glass-card:hover {
   border-color: var(--border-hover);
-  box-shadow: var(--shadow-xl);
   transform: translateY(-4px);
 }
 
@@ -884,11 +883,9 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 
 /* Hover Glow */
 .service-card:hover {
-  box-shadow: 0 20px 60px rgba(59, 130, 246, 0.18) !important;
 }
 
 [data-theme="dark"] .service-card:hover {
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6) !important;
 }
 
 /* ============================================================
@@ -3553,7 +3550,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .how-card:hover {
-  box-shadow: var(--shadow-xl);
 }
 
 .how-badge {
@@ -3769,7 +3765,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .blog-card:hover {
-  box-shadow: var(--shadow-xl);
 }
 
 .blog-img-wrap {
