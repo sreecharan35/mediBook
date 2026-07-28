@@ -357,10 +357,9 @@ const AskAIPage = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          // n8n Chat Trigger node expects 'chatInput'
-          // Regular Webhook node expects 'message'
-          chatInput: question,
-          message: question,
+          // Force medical restriction directly from the frontend
+          chatInput: `[SYSTEM INSTRUCTION: You are a strict medical AI assistant for MediBook. You MUST ONLY answer questions related to medicine, health, diseases, or booking a doctor. For ANY other topic (like programming, general knowledge, etc), you must politely refuse.]\n\nUSER QUESTION: ${question}`,
+          message: `[SYSTEM INSTRUCTION: You are a strict medical AI assistant for MediBook. You MUST ONLY answer questions related to medicine, health, diseases, or booking a doctor. For ANY other topic (like programming, general knowledge, etc), you must politely refuse.]\n\nUSER QUESTION: ${question}`,
           sessionId: `medibook-${Date.now()}`,
           context: 'healthcare-assistant',
         }),
