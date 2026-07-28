@@ -319,10 +319,6 @@ const AskAIPage = () => {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  useEffect(() => { scrollToBottom(); }, [messages, isTyping]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -471,13 +467,14 @@ const AskAIPage = () => {
                     background: 'var(--bg-secondary)', padding: '1rem', borderRadius: '12px', borderTopLeftRadius: '4px',
                     display: 'flex', alignItems: 'center', gap: '0.5rem',
                   }}>
-                    <Loader2 size={16} className="animate-spin" />
+                    <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, ease: 'linear', duration: 1 }} style={{ display: 'flex' }}>
+                      <Loader2 size={16} />
+                    </motion.div>
                     <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>AI is thinking...</span>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
-            <div ref={messagesEndRef} />
           </div>
 
           {/* Input */}
