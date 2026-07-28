@@ -366,22 +366,30 @@ const AskAIPage = () => {
         }),
       });
       if (!response.ok) throw new Error(`n8n error: ${response.status}`);
-      const data = await response.json();
+      const contentType = response.headers.get('content-type');
+      let reply = '';
+      
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+        const firstItem = Array.isArray(data) ? data[0] : data;
+        
+        reply = 
+          firstItem?.output ||
+          firstItem?.reply ||
+          firstItem?.text ||
+          firstItem?.answer ||
+          firstItem?.response ||
+          firstItem?.choices?.[0]?.message?.content ||
+          (typeof firstItem?.message === 'string' ? firstItem.message : firstItem?.message?.content) ||
+          'Got your message! (Check the n8n node — make sure it returns a JSON field named output, reply, or text)';
+          
+        if (typeof reply !== 'string') {
+          reply = JSON.stringify(reply, null, 2);
+        }
+      } else {
+        reply = await response.text();
+      }
 
-      // Handles multiple n8n response formats:
-      // - Chat Trigger node:   data[0].output  or  data.output
-      // - Regular Webhook:     data.reply / data.text / data.message
-      // - OpenAI passthrough:  data.choices[0].message.content
-      const reply =
-        (Array.isArray(data) ? data[0]?.output : null) ||
-        data?.output ||
-        data?.reply ||
-        data?.text ||
-        data?.message ||
-        data?.answer ||
-        data?.response ||
-        data?.choices?.[0]?.message?.content ||
-        'Got your message! (Check the n8n node — make sure it returns a JSON field named output, reply, or text)';
       setMessages(prev => [...prev, { id: Date.now() + 1, type: 'ai', text: reply }]);
     } catch (err) {
       console.error('[AskAI]', err);
