@@ -15,8 +15,7 @@ const getEnvVar = (key, fallback = '') => {
 };
 
 export const ENV = {
-  SUPABASE_URL: getEnvVar('VITE_SUPABASE_URL'),
-  SUPABASE_ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY'),
+
   N8N_WEBHOOK_URL: getEnvVar('VITE_N8N_WEBHOOK_URL'),
   
   // Placeholders for future AI integrations
