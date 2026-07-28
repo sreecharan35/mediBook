@@ -198,7 +198,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 .btn:hover::after { opacity: 1; }
 
 .btn-primary {
-  background: var(--gradient-brand);
+  background: var(--brand-600);
   color: #ffffff;
   box-shadow: var(--shadow-brand);
 }
@@ -706,7 +706,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 .appt-btn {
   width: 100%;
   padding: 0.85rem;
-  background: var(--gradient-brand);
+  background: var(--brand-600);
   color: white;
   border-radius: 12px;
   font-weight: 700;
@@ -1003,7 +1003,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 
 .book-btn {
   padding: 0.5rem 1rem;
-  background: var(--gradient-brand);
+  background: var(--brand-600);
   color: white;
   border-radius: 10px;
   font-size: 0.82rem;
@@ -4031,7 +4031,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
   align-items: center;
   gap: 0.45rem;
   padding: 0.75rem 1.5rem;
-  background: var(--gradient-brand);
+  background: var(--brand-600);
   color: white;
   border-radius: 14px;
   font-weight: 700;
@@ -4265,7 +4265,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
   margin-top: 0.75rem;
   padding: 0.5rem;
   border-radius: 10px;
-  background: var(--gradient-brand);
+  background: var(--brand-600);
   color: white;
   font-size: 0.78rem;
   font-weight: 700;
