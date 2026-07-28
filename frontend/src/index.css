@@ -137,7 +137,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .glass-card:hover {
-  border-color: var(--border-hover);
   transform: translateY(-4px);
 }
 
@@ -203,7 +202,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .btn-primary:hover {
-  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
   transform: translateY(-2px);
 }
 
@@ -719,7 +717,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .appt-btn:hover {
-  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.4);
   transform: translateY(-2px);
 }
 
@@ -1010,7 +1007,6 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
 }
 
 .book-btn:hover {
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
   transform: translateY(-1px);
 }
 
@@ -4040,7 +4036,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
   flex-shrink: 0;
   margin-left: 0.5rem;
 }
-.nh-search-btn:hover { box-shadow: 0 8px 28px rgba(37,99,235,0.45); }
+.nh-search-btn:hover { }
 
 /* Quick tags */
 .nh-tags {
@@ -4270,7 +4266,7 @@ button { cursor: pointer; font-family: inherit; border: none; outline: none; }
   box-shadow: 0 4px 12px rgba(37,99,235,0.28);
   transition: box-shadow 0.2s;
 }
-.nh-doc-btn:hover { box-shadow: 0 6px 18px rgba(37,99,235,0.4); }
+.nh-doc-btn:hover { }
 
 /* ── Floating accent cards ── */
 .nh-accent-card {
