@@ -308,15 +308,26 @@ const SetupGuide = () => {
    MAIN PAGE
 ══════════════════════════════════════════════════════════ */
 const AskAIPage = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: 'ai',
-      text: isN8nConnected
-        ? 'Hello! I am your AI Health Assistant. How can I help you today?'
-        : 'Hello! I am your AI Health Assistant. n8n is not connected yet — follow the setup guide above to enable real AI responses.',
+  const [messages, setMessages] = useState(() => {
+    const saved = sessionStorage.getItem('ai_chat_messages');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) {}
     }
-  ]);
+    return [
+      {
+        id: 1,
+        type: 'ai',
+        text: isN8nConnected
+          ? 'Hello! I am your AI Health Assistant. How can I help you today?'
+          : 'Hello! I am your AI Health Assistant. n8n is not connected yet — follow the setup guide above to enable real AI responses.',
+      }
+    ];
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem('ai_chat_messages', JSON.stringify(messages));
+  }, [messages]);
+
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
